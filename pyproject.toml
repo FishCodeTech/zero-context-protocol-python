@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zcp"
+version = "0.2.0a0"
+description = "Official Python SDK for Zero Context Protocol (ZCP), with MCP-compatible server surfaces and native protocol support"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+mcp = ["mcp @ git+https://github.com/modelcontextprotocol/python-sdk.git"]
+openai = ["openai>=1.0.0"]
+dev = ["pytest>=8.0.0"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["zcp*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

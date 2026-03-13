@@ -1,0 +1,11 @@
+.DS_Store
+.deepeval/
+.pytest_cache/
+.venv/
+.venv-bench/
+
+__pycache__/
+*.py[cod]
+
+node_modules/
+.next/

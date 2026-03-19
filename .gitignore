@@ -12,3 +12,5 @@ node_modules/
 .next/
 benchmark_reports/checkpoints/
 benchmark_reports/**/checkpoints/
+dist/
+build/

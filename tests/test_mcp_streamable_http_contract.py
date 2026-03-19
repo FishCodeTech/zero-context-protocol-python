@@ -49,7 +49,7 @@ from mcp.client.streamable_http import streamable_http_client
 
 
 async def main():
-    http_client = httpx.AsyncClient(headers={{"authorization": "Bearer replace-me-in-production"}})
+    http_client = httpx.AsyncClient(headers={{"authorization": "Bearer demo-token"}})
     async with streamable_http_client("http://127.0.0.1:{port}/mcp", http_client=http_client) as streams:
         read_stream, write_stream = streams
         async with ClientSession(read_stream, write_stream) as session:

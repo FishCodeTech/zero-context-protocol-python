@@ -10,9 +10,9 @@ It serves two goals at the same time:
 - remain compatible with MCP-facing integrations through stdio, streamable
   HTTP, and WebSocket surfaces
 
-The public Python package remains:
+The public Python surface remains:
 
-- package name: `zcp`
+- distribution name: `zero-context-protocol-sdk`
 - import path: `import zcp`
 
 The companion protocol and documentation repository lives in

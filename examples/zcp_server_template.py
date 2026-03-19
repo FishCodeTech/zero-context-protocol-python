@@ -7,6 +7,7 @@ Run with:
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -30,9 +31,9 @@ app = FastZCP(
     version="1.0.0",
     instructions="Example user-owned ZCP backend with tools, resources, prompts, completions, tasks, and auth metadata.",
     auth_profile=AuthProfile(
-        issuer="https://auth.example.com",
-        authorization_url="https://auth.example.com/oauth/authorize",
-        token_url="https://auth.example.com/oauth/token",
+        issuer=os.environ.get("ZCP_AUTH_ISSUER", "https://auth.example.com"),
+        authorization_url=os.environ.get("ZCP_AUTHORIZATION_URL", "https://auth.example.com/oauth/authorize"),
+        token_url=os.environ.get("ZCP_TOKEN_URL", "https://auth.example.com/oauth/token"),
         scopes=["weather.read", "weather.admin"],
     ),
 )
@@ -97,7 +98,7 @@ application = create_asgi_app(
     config=ZCPServerConfig(
         service_name="zcp-weather",
         environment="production",
-        auth=BearerAuthConfig(token="replace-me-in-production"),
+        auth=BearerAuthConfig(token=os.environ.get("ZCP_BEARER_TOKEN", "demo-token")),
         rate_limit=RateLimitConfig(window_seconds=60, max_requests=240),
     ),
 )

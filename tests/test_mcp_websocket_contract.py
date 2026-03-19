@@ -48,7 +48,7 @@ from mcp.client.websocket import websocket_client
 
 
 async def main():
-    async with websocket_client("ws://127.0.0.1:{port}/ws?token=replace-me-in-production") as streams:
+    async with websocket_client("ws://127.0.0.1:{port}/ws?token=demo-token") as streams:
         read_stream, write_stream = streams
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()

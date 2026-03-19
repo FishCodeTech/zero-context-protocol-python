@@ -88,7 +88,7 @@ def main() -> None:
         temperature=args.temperature,
         progress=log_progress,
         python_executable=sys.executable,
-        mcp_server_script=str(ROOT / "examples" / "real_sdk_mcp_server.py"),
+        mcp_server_script=str(ROOT / "tools" / "real_sdk_mcp_server.py"),
     )
     runs = [*zcp_runs, *mcp_runs]
     print(print_summary_table(runs))

@@ -1,5 +1,9 @@
 # Zero Context Protocol Python SDK
 
+[![PyPI version](https://img.shields.io/pypi/v/zero-context-protocol-sdk.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
+[![Python versions](https://img.shields.io/pypi/pyversions/zero-context-protocol-sdk.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/zero-context-protocol-sdk.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
+
 `zero-context-protocol-python` is the reference Python SDK and runtime for Zero
 Context Protocol (ZCP).
 
@@ -45,6 +49,20 @@ Current headline result:
 - overall advantage: `3.83x`
 
 ## Install
+
+From PyPI:
+
+```bash
+pip install --pre zero-context-protocol-sdk
+```
+
+With optional extras:
+
+```bash
+pip install --pre "zero-context-protocol-sdk[openai,mcp]"
+```
+
+For local development from source:
 
 ```bash
 pip install -e ".[dev,openai,mcp]"

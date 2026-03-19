@@ -53,13 +53,13 @@ Current headline result:
 From PyPI:
 
 ```bash
-pip install --pre zero-context-protocol-sdk
+pip install zero-context-protocol-sdk
 ```
 
 With optional extras:
 
 ```bash
-pip install --pre "zero-context-protocol-sdk[openai,mcp]"
+pip install "zero-context-protocol-sdk[openai,mcp]"
 ```
 
 For local development from source:

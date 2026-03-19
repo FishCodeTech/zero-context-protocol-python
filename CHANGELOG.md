@@ -7,6 +7,8 @@ pre-1.0 semantic versioning policy.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-03-19
+
 ### Added
 
 - formal tool exposure configuration via `ToolExposureConfig`

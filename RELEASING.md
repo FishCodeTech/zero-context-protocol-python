@@ -18,7 +18,7 @@ The repository includes a trusted-publisher release workflow at
 To use it for the `zero-context-protocol-sdk` distribution:
 
 1. configure this GitHub repository as a trusted publisher in PyPI
-2. push a tag like `v0.2.0a0`
+2. push a tag like `v0.2.0`
 3. let the workflow build and publish the package
 
 ## Manual Publishing

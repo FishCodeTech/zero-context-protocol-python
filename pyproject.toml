@@ -13,10 +13,10 @@ authors = [{name = "Zero Context Protocol Authors"}]
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/jiayuqi7813/zero-context-protocol-python"
-Documentation = "https://github.com/jiayuqi7813/zero-context-protocol"
-Repository = "https://github.com/jiayuqi7813/zero-context-protocol-python"
-Issues = "https://github.com/jiayuqi7813/zero-context-protocol-python/issues"
+Homepage = "https://github.com/FishCodeTech/zero-context-protocol-python"
+Documentation = "https://github.com/FishCodeTech/zero-context-protocol"
+Repository = "https://github.com/FishCodeTech/zero-context-protocol-python"
+Issues = "https://github.com/FishCodeTech/zero-context-protocol-python/issues"
 
 [project.optional-dependencies]
 mcp = ["mcp @ git+https://github.com/modelcontextprotocol/python-sdk.git"]

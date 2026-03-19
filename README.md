@@ -16,7 +16,7 @@ The public Python surface remains:
 - import path: `import zcp`
 
 The companion protocol and documentation repository lives in
-[`zero-context-protocol`](https://github.com/jiayuqi7813/zero-context-protocol).
+[`zero-context-protocol`](https://github.com/FishCodeTech/zero-context-protocol).
 
 ## What This Repository Owns
 

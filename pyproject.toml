@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zero-context-protocol-sdk"
+version = "0.2.0a0"
+description = "Official Python SDK for Zero Context Protocol (ZCP), with MCP-compatible server surfaces and native protocol support"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{name = "Zero Context Protocol Authors"}]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/jiayuqi7813/zero-context-protocol-python"
+Documentation = "https://github.com/jiayuqi7813/zero-context-protocol"
+Repository = "https://github.com/jiayuqi7813/zero-context-protocol-python"
+Issues = "https://github.com/jiayuqi7813/zero-context-protocol-python/issues"
+
+[project.optional-dependencies]
+mcp = ["mcp @ git+https://github.com/modelcontextprotocol/python-sdk.git"]
+openai = ["openai>=1.0.0"]
+dev = ["pytest>=8.0.0", "ruff>=0.11.0", "build>=1.2.2", "twine>=5.1.1"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["zcp*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint.per-file-ignores]
+"examples/*.py" = ["E402"]

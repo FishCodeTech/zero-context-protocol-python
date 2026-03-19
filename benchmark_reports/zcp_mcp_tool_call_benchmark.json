@@ -1,0 +1,460 @@
+{
+  "model": "deepseek-chat",
+  "repeats": 2,
+  "summary": [
+    {
+      "protocol": "mcp",
+      "runs": 8,
+      "answer_accuracy": 1.0,
+      "tool_compliance": 1.0,
+      "avg_prompt_tokens": 4136.125,
+      "avg_completion_tokens": 367.75,
+      "avg_total_tokens": 4503.875
+    },
+    {
+      "protocol": "zcp",
+      "runs": 8,
+      "answer_accuracy": 1.0,
+      "tool_compliance": 1.0,
+      "avg_prompt_tokens": 2577.5,
+      "avg_completion_tokens": 255.5,
+      "avg_total_tokens": 2833.0
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "warmer_city_delta",
+      "zcp_avg_total_tokens": 2821.0,
+      "zcp_accuracy": 1.0,
+      "zcp_tool_compliance": 1.0,
+      "mcp_avg_total_tokens": 4579.5,
+      "mcp_accuracy": 1.0,
+      "mcp_tool_compliance": 1.0,
+      "mcp_vs_zcp_ratio": 1.6233605104572846,
+      "token_delta_mcp_minus_zcp": 1758.5
+    },
+    {
+      "case_id": "shanghai_temp_f_and_humidity",
+      "zcp_avg_total_tokens": 2565.0,
+      "zcp_accuracy": 1.0,
+      "zcp_tool_compliance": 1.0,
+      "mcp_avg_total_tokens": 3834.5,
+      "mcp_accuracy": 1.0,
+      "mcp_tool_compliance": 1.0,
+      "mcp_vs_zcp_ratio": 1.4949317738791423,
+      "token_delta_mcp_minus_zcp": 1269.5
+    },
+    {
+      "case_id": "average_three_city_temperature",
+      "zcp_avg_total_tokens": 3116.0,
+      "zcp_accuracy": 1.0,
+      "zcp_tool_compliance": 1.0,
+      "mcp_avg_total_tokens": 5237.5,
+      "mcp_accuracy": 1.0,
+      "mcp_tool_compliance": 1.0,
+      "mcp_vs_zcp_ratio": 1.6808408215661104,
+      "token_delta_mcp_minus_zcp": 2121.5
+    },
+    {
+      "case_id": "more_humid_city_delta",
+      "zcp_avg_total_tokens": 2830.0,
+      "zcp_accuracy": 1.0,
+      "zcp_tool_compliance": 1.0,
+      "mcp_avg_total_tokens": 4364.0,
+      "mcp_accuracy": 1.0,
+      "mcp_tool_compliance": 1.0,
+      "mcp_vs_zcp_ratio": 1.5420494699646643,
+      "token_delta_mcp_minus_zcp": 1534.0
+    }
+  ],
+  "runs": [
+    {
+      "protocol": "zcp",
+      "case_id": "warmer_city_delta",
+      "repeat_index": 1,
+      "prompt_tokens": 2565,
+      "completion_tokens": 256,
+      "total_tokens": 2821,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "weather.get_current",
+        "math.subtract"
+      ],
+      "final_text": "根据查询结果，杭州温度24°C，北京温度18°C，杭州温度更高，温差为6°C。\n\n{\"warmer_city\":\"Hangzhou\",\"delta_c\":6.0}",
+      "parsed_output": {
+        "warmer_city": "Hangzhou",
+        "delta_c": 6.0
+      },
+      "error": null
+    },
+    {
+      "protocol": "zcp",
+      "case_id": "shanghai_temp_f_and_humidity",
+      "repeat_index": 1,
+      "prompt_tokens": 2359,
+      "completion_tokens": 202,
+      "total_tokens": 2561,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "unit.celsius_to_fahrenheit"
+      ],
+      "final_text": "现在我有所有需要的数据：城市是上海，华氏温度是71.6，湿度是81。让我按照要求的格式输出JSON。\n\n{\"city\":\"Shanghai\",\"temp_f\":71.6,\"humidity\":81}",
+      "parsed_output": {
+        "city": "Shanghai",
+        "temp_f": 71.6,
+        "humidity": 81
+      },
+      "error": null
+    },
+    {
+      "protocol": "zcp",
+      "case_id": "average_three_city_temperature",
+      "repeat_index": 1,
+      "prompt_tokens": 2803,
+      "completion_tokens": 313,
+      "total_tokens": 3116,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "weather.get_current",
+        "weather.get_current",
+        "math.average"
+      ],
+      "final_text": "平均温度是22.3°C。现在我需要按照要求的格式输出JSON。\n\n{\"avg_temp_c\":22.3,\"cities\":[\"Beijing\",\"Shanghai\",\"Shenzhen\"]}",
+      "parsed_output": {
+        "avg_temp_c": 22.3,
+        "cities": [
+          "Beijing",
+          "Shanghai",
+          "Shenzhen"
+        ]
+      },
+      "error": null
+    },
+    {
+      "protocol": "zcp",
+      "case_id": "more_humid_city_delta",
+      "repeat_index": 1,
+      "prompt_tokens": 2583,
+      "completion_tokens": 247,
+      "total_tokens": 2830,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "weather.get_current",
+        "math.subtract"
+      ],
+      "final_text": "深圳湿度更高（84% > 67%），湿度差为17%。\n\n{\"more_humid_city\":\"Shenzhen\",\"humidity_delta\":17.0}",
+      "parsed_output": {
+        "more_humid_city": "Shenzhen",
+        "humidity_delta": 17.0
+      },
+      "error": null
+    },
+    {
+      "protocol": "zcp",
+      "case_id": "warmer_city_delta",
+      "repeat_index": 2,
+      "prompt_tokens": 2565,
+      "completion_tokens": 256,
+      "total_tokens": 2821,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "weather.get_current",
+        "math.subtract"
+      ],
+      "final_text": "根据查询结果，杭州温度24°C，北京温度18°C，杭州温度更高，温差为6°C。\n\n{\"warmer_city\":\"Hangzhou\",\"delta_c\":6.0}",
+      "parsed_output": {
+        "warmer_city": "Hangzhou",
+        "delta_c": 6.0
+      },
+      "error": null
+    },
+    {
+      "protocol": "zcp",
+      "case_id": "shanghai_temp_f_and_humidity",
+      "repeat_index": 2,
+      "prompt_tokens": 2359,
+      "completion_tokens": 210,
+      "total_tokens": 2569,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "unit.celsius_to_fahrenheit"
+      ],
+      "final_text": "现在我已经得到了所有需要的信息：\n- 城市：上海\n- 温度（华氏度）：71.6\n- 湿度：81\n\n按照要求的JSON格式输出：\n\n{\"city\":\"Shanghai\",\"temp_f\":71.6,\"humidity\":81}",
+      "parsed_output": {
+        "city": "Shanghai",
+        "temp_f": 71.6,
+        "humidity": 81
+      },
+      "error": null
+    },
+    {
+      "protocol": "zcp",
+      "case_id": "average_three_city_temperature",
+      "repeat_index": 2,
+      "prompt_tokens": 2803,
+      "completion_tokens": 313,
+      "total_tokens": 3116,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "weather.get_current",
+        "weather.get_current",
+        "math.average"
+      ],
+      "final_text": "平均温度是22.3°C。现在我需要按照要求的格式输出JSON。\n\n{\"avg_temp_c\":22.3,\"cities\":[\"Beijing\",\"Shanghai\",\"Shenzhen\"]}",
+      "parsed_output": {
+        "avg_temp_c": 22.3,
+        "cities": [
+          "Beijing",
+          "Shanghai",
+          "Shenzhen"
+        ]
+      },
+      "error": null
+    },
+    {
+      "protocol": "zcp",
+      "case_id": "more_humid_city_delta",
+      "repeat_index": 2,
+      "prompt_tokens": 2583,
+      "completion_tokens": 247,
+      "total_tokens": 2830,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 3,
+      "tool_history": [
+        "weather.get_current",
+        "weather.get_current",
+        "math.subtract"
+      ],
+      "final_text": "深圳湿度更高（84% > 67%），湿度差为17%。\n\n{\"more_humid_city\":\"Shenzhen\",\"humidity_delta\":17.0}",
+      "parsed_output": {
+        "more_humid_city": "Shenzhen",
+        "humidity_delta": 17.0
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "warmer_city_delta",
+      "repeat_index": 1,
+      "prompt_tokens": 4187,
+      "completion_tokens": 402,
+      "total_tokens": 4589,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "subtract_numbers"
+      ],
+      "final_text": "现在我可以生成最终答案。杭州温度更高，温差为6.0°C。\n\n{\"warmer_city\":\"杭州\",\"delta_c\":6.0}",
+      "parsed_output": {
+        "warmer_city": "杭州",
+        "delta_c": 6.0
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "shanghai_temp_f_and_humidity",
+      "repeat_index": 1,
+      "prompt_tokens": 3582,
+      "completion_tokens": 266,
+      "total_tokens": 3848,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "convert_celsius_to_fahrenheit"
+      ],
+      "final_text": "现在我有所有需要的信息：城市名\"Shanghai\"，温度71.6°F，湿度81%。按照要求的格式输出：\n\n{\"city\":\"Shanghai\",\"temp_f\":71.6,\"humidity\":81}",
+      "parsed_output": {
+        "city": "Shanghai",
+        "temp_f": 71.6,
+        "humidity": 81
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "average_three_city_temperature",
+      "repeat_index": 1,
+      "prompt_tokens": 4752,
+      "completion_tokens": 485,
+      "total_tokens": 5237,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "average_numbers"
+      ],
+      "final_text": "平均温度是22.3°C。现在我需要按照要求的格式输出JSON。\n\n{\"avg_temp_c\":22.3,\"cities\":[\"Beijing\",\"Shanghai\",\"Shenzhen\"]}",
+      "parsed_output": {
+        "avg_temp_c": 22.3,
+        "cities": [
+          "Beijing",
+          "Shanghai",
+          "Shenzhen"
+        ]
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "more_humid_city_delta",
+      "repeat_index": 1,
+      "prompt_tokens": 4031,
+      "completion_tokens": 334,
+      "total_tokens": 4365,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "subtract_numbers"
+      ],
+      "final_text": "根据查询结果：\n- 深圳湿度：84%\n- 杭州湿度：67%\n- 湿度差：17%\n- 湿度更高的城市：深圳\n\n{\"more_humid_city\":\"深圳\",\"humidity_delta\":17.0}",
+      "parsed_output": {
+        "more_humid_city": "深圳",
+        "humidity_delta": 17.0
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "warmer_city_delta",
+      "repeat_index": 2,
+      "prompt_tokens": 4171,
+      "completion_tokens": 399,
+      "total_tokens": 4570,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "subtract_numbers"
+      ],
+      "final_text": "根据查询结果，杭州温度更高（24°C vs 18°C），温差为6°C。现在我需要输出指定格式的JSON。\n\n{\"warmer_city\":\"杭州\",\"delta_c\":6.0}",
+      "parsed_output": {
+        "warmer_city": "杭州",
+        "delta_c": 6.0
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "shanghai_temp_f_and_humidity",
+      "repeat_index": 2,
+      "prompt_tokens": 3582,
+      "completion_tokens": 239,
+      "total_tokens": 3821,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "convert_celsius_to_fahrenheit"
+      ],
+      "final_text": "{\"city\":\"Shanghai\",\"temp_f\":71.6,\"humidity\":81}",
+      "parsed_output": {
+        "city": "Shanghai",
+        "temp_f": 71.6,
+        "humidity": 81
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "average_three_city_temperature",
+      "repeat_index": 2,
+      "prompt_tokens": 4753,
+      "completion_tokens": 485,
+      "total_tokens": 5238,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "average_numbers"
+      ],
+      "final_text": "平均温度为22.3°C。现在我可以输出要求的JSON格式了。\n\n{\"avg_temp_c\":22.3,\"cities\":[\"Beijing\",\"Shanghai\",\"Shenzhen\"]}",
+      "parsed_output": {
+        "avg_temp_c": 22.3,
+        "cities": [
+          "Beijing",
+          "Shanghai",
+          "Shenzhen"
+        ]
+      },
+      "error": null
+    },
+    {
+      "protocol": "mcp",
+      "case_id": "more_humid_city_delta",
+      "repeat_index": 2,
+      "prompt_tokens": 4031,
+      "completion_tokens": 332,
+      "total_tokens": 4363,
+      "answer_ok": true,
+      "tool_ok": true,
+      "turns": 4,
+      "tool_history": [
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "get_weather",
+        "subtract_numbers"
+      ],
+      "final_text": "根据查询结果：\n- 深圳湿度：84%\n- 杭州湿度：67%\n- 湿度差：17%\n- 湿度更高的城市：深圳\n\n{\"more_humid_city\":\"深圳\",\"humidity_delta\":17}",
+      "parsed_output": {
+        "more_humid_city": "深圳",
+        "humidity_delta": 17
+      },
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+.DS_Store
+.deepeval/
+.pytest_cache/
+.venv/
+.venv-bench/
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+node_modules/
+.next/
+benchmark_reports/checkpoints/
+benchmark_reports/**/checkpoints/
+dist/
+build/

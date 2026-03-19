@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 from .server import FastZCP
 from .session import ZCPClientSession
@@ -45,3 +45,18 @@ def streamable_http_server(
 
 def streamable_http_client(server_session, **kwargs: Any) -> ZCPClientSession:
     return ZCPClientSession(server_session, transport="streamable_http", **kwargs)
+
+
+def websocket_server(
+    app: FastZCP,
+    *,
+    endpoint: str = "ws://127.0.0.1:8000/ws",
+    session_id: str = "websocket-server",
+):
+    session = app.create_server_session(session_id=session_id)
+    session.transport_config = TransportConfig(kind="websocket", endpoint=endpoint)
+    return session
+
+
+def websocket_client(server_session, **kwargs: Any) -> ZCPClientSession:
+    return ZCPClientSession(server_session, transport="websocket", **kwargs)

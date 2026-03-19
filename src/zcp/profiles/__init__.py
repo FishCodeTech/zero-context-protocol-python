@@ -1,5 +1,5 @@
 from .mcp import MCPProfile
-from .native import format_call, format_registry, format_result
+from .native import SemanticWorkflowProfile, format_call, format_registry, format_result
 from .oai import (
     AgentLoop,
     OpenAIAdapter,
@@ -16,6 +16,7 @@ __all__ = [
     "MCPProfile",
     "OpenAIAdapter",
     "OpenAIResponsesAdapter",
+    "SemanticWorkflowProfile",
     "TurnResult",
     "compile_openai_tools",
     "format_call",

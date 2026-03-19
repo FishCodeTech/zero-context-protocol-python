@@ -54,7 +54,7 @@ app = FastZCP(
     inline_ok=True,
     required_scopes=("weather.read",),
 )
-def get_weather(city: str, unit: str = "celsius"):
+def get_weather(city: str, unit: str = "celsius", ctx=None):
     return {"city": city, "unit": unit, "temperature": 24, "condition": "Cloudy", "humidity": 67}
 
 

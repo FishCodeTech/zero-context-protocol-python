@@ -470,6 +470,44 @@ class OpenAIResponsesAdapter:
         mapping = self._name_map_cache.get((session.registry_hash, session.tool_subset), {})
         return mapping.get(name, name)
 
+    async def discover_tool_subset(
+        self,
+        tools_session: Any,
+        *,
+        profile: str | None = None,
+        groups: list[str] | None = None,
+        exclude_groups: list[str] | None = None,
+        stages: list[str] | None = None,
+    ) -> list[str]:
+        list_tools = getattr(tools_session, "list_tools", None)
+        if list_tools is None:
+            raise TypeError("tools_session must provide an async list_tools method")
+        result = await list_tools(
+            profile=profile,
+            groups=groups,
+            exclude_groups=exclude_groups,
+            stages=stages,
+        )
+        tools = _get_value(result, "tools", []) or []
+        allowed_aliases = {tool.alias for tool in self.registry.subset().tools}
+        subset: list[str] = []
+        seen: set[str] = set()
+        for item in tools:
+            name = str(_get_value(item, "name", "")).strip()
+            if not name or name in seen or name not in allowed_aliases:
+                continue
+            seen.add(name)
+            subset.append(name)
+        return subset
+
+    async def discover_semantic_workflow_subset(
+        self,
+        tools_session: Any,
+        *,
+        profile_name: str = "semantic-workflow",
+    ) -> list[str]:
+        return await self.discover_tool_subset(tools_session, profile=profile_name)
+
 
 class AgentLoop:
     def __init__(self, adapter: OpenAIResponsesAdapter, *, max_tool_rounds: int = 8) -> None:
@@ -513,6 +551,72 @@ class AgentLoop:
                 current_input = last_result.submitted_outputs
                 previous_response_id = last_result.response_id
         raise RuntimeError("max_tool_rounds exceeded")
+
+    async def run_with_discovery(
+        self,
+        client: Any,
+        model: str,
+        input_items: list[dict[str, Any]],
+        session: SessionState,
+        *,
+        tools_session: Any,
+        profile: str | None = None,
+        groups: list[str] | None = None,
+        exclude_groups: list[str] | None = None,
+        stages: list[str] | None = None,
+        fallback_to_all_tools: bool = True,
+        strict_mode: bool = True,
+        extra_create_args: dict[str, Any] | None = None,
+    ) -> TurnResult:
+        subset = await self.adapter.discover_tool_subset(
+            tools_session,
+            profile=profile,
+            groups=groups,
+            exclude_groups=exclude_groups,
+            stages=stages,
+        )
+        selected_subset: Iterable[str] | None = subset
+        if fallback_to_all_tools and not subset:
+            selected_subset = None
+        return await self.run(
+            client,
+            model,
+            input_items,
+            session,
+            tool_subset=selected_subset,
+            strict_mode=strict_mode,
+            extra_create_args=extra_create_args,
+        )
+
+    async def run_with_semantic_workflow(
+        self,
+        client: Any,
+        model: str,
+        input_items: list[dict[str, Any]],
+        session: SessionState,
+        *,
+        tools_session: Any,
+        profile_name: str = "semantic-workflow",
+        fallback_to_all_tools: bool = True,
+        strict_mode: bool = True,
+        extra_create_args: dict[str, Any] | None = None,
+    ) -> TurnResult:
+        subset = await self.adapter.discover_semantic_workflow_subset(
+            tools_session,
+            profile_name=profile_name,
+        )
+        selected_subset: Iterable[str] | None = subset
+        if fallback_to_all_tools and not subset:
+            selected_subset = None
+        return await self.run(
+            client,
+            model,
+            input_items,
+            session,
+            tool_subset=selected_subset,
+            strict_mode=strict_mode,
+            extra_create_args=extra_create_args,
+        )
 
 
 OpenAIAdapter = OpenAIResponsesAdapter
@@ -574,6 +678,36 @@ async def stream_responses_turn(
         extra_create_args=extra_create_args,
     ):
         yield event
+
+
+async def discover_tool_subset(
+    adapter: OpenAIResponsesAdapter,
+    tools_session: Any,
+    *,
+    profile: str | None = None,
+    groups: list[str] | None = None,
+    exclude_groups: list[str] | None = None,
+    stages: list[str] | None = None,
+) -> list[str]:
+    return await adapter.discover_tool_subset(
+        tools_session,
+        profile=profile,
+        groups=groups,
+        exclude_groups=exclude_groups,
+        stages=stages,
+    )
+
+
+async def discover_semantic_workflow_subset(
+    adapter: OpenAIResponsesAdapter,
+    tools_session: Any,
+    *,
+    profile_name: str = "semantic-workflow",
+) -> list[str]:
+    return await adapter.discover_semantic_workflow_subset(
+        tools_session,
+        profile_name=profile_name,
+    )
 
 
 def submit_tool_results(

@@ -1,9 +1,19 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from typing import Any
 
 from zcp.canonical_protocol import CallResult, ToolDefinition
+
+
+@dataclass(frozen=True)
+class SemanticWorkflowProfile:
+    name: str = "semantic-workflow"
+    description: str = "Expose workflow-tagged tools only when the server provides them."
+
+    def as_list_tools_params(self) -> dict[str, Any]:
+        return {"profile": self.name}
 
 
 def format_registry(tools: list[ToolDefinition]) -> str:

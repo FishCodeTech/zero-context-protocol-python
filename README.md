@@ -1,22 +1,48 @@
 # Zero Context Protocol Python SDK
 
-This repository is the official Python SDK for Zero Context Protocol.
+`zero-context-protocol-python` is the reference Python SDK and runtime for Zero
+Context Protocol (ZCP).
 
-The public Python surface stays:
+It serves two goals at the same time:
+
+- provide a native ZCP runtime that can optimize tool exposure, routing, and
+  token usage for agent workflows
+- remain compatible with MCP-facing integrations through stdio, streamable
+  HTTP, and WebSocket surfaces
+
+The public Python package remains:
 
 - package name: `zcp`
 - import path: `import zcp`
 
-The companion documentation and protocol site lives separately as
-`zero-context-protocol`.
+The companion protocol and documentation repository lives in
+[`zero-context-protocol`](https://github.com/jiayuqi7813/zero-context-protocol).
 
 ## What This Repository Owns
 
-- `src/zcp`: the official Python SDK and runtime
-- `examples`: official and reference Python examples
-- `tests`: SDK, MCP compatibility, and runtime regression tests
-- `tools`: repository-local tooling such as the real SDK benchmark harness
-- `benchmark_reports`: generated benchmark artifacts that the docs site can consume
+- [`src/zcp`](src/zcp): official SDK, runtime, transports, gateway, auth, and profiles
+- [`examples`](examples): public examples, migration paths, and benchmark entrypoints
+- [`tests`](tests): SDK, MCP compatibility, transport, and benchmark regression coverage
+- [`tools`](tools): local benchmark harnesses and benchmark suites
+- [`benchmark_reports`](benchmark_reports): published benchmark artifacts
+
+## Why ZCP Instead Of Plain MCP
+
+ZCP keeps the MCP compatibility surface, but adds native runtime affordances
+for model-facing efficiency:
+
+- handle-first results and compact tool output shaping
+- semantic workflow profiles for native tool discovery
+- staged tool exposure for complex workflows
+- task-aware runtime behavior
+- benchmark-backed token reductions in real LLM scenarios
+
+The latest published Excel benchmark lives in
+[`benchmark_reports/full_semantic_compare_v5`](benchmark_reports/full_semantic_compare_v5/semantic_benchmark_summary.md).
+Current headline result:
+
+- overall native ZCP vs MCP surface: `8027.9` vs `30723.7` total tokens
+- overall advantage: `3.83x`
 
 ## Install
 
@@ -24,70 +50,99 @@ The companion documentation and protocol site lives separately as
 pip install -e ".[dev,openai,mcp]"
 ```
 
-Python `3.10+` is required. The MCP extra uses the official MCP Python SDK.
+Python `3.10+` is required.
 
-## Official Paths
+## 3-Minute Quickstart
 
-### MCP-compatible stdio server
+Run a minimal MCP-compatible stdio server:
 
 ```bash
 python3 examples/run_zcp_mcp_stdio_server.py
 ```
 
-### ASGI server with `/zcp` and `/mcp`
+Run an ASGI service exposing native and MCP-compatible surfaces:
 
 ```bash
 python3 examples/run_zcp_api_server.py
 ```
 
-### Native ZCP example
+Run the smallest native ZCP example:
 
 ```bash
 python3 examples/zcp_weather_server.py
 ```
 
-### Real SDK benchmark
+List native semantic workflow tools from a client:
 
-```bash
-python3 examples/compare_zcp_mcp_tool_call_benchmark.py --repeats 2
+```python
+from zcp import SemanticWorkflowProfile
+
+profile = SemanticWorkflowProfile()
+tools = await client.list_tools(**profile.as_list_tools_params())
 ```
 
-Generated reports land in `benchmark_reports/`.
+## Stable, Beta, Experimental
+
+### Stable
+
+- tools
+- resources and resource templates
+- prompts
+- `completion/complete`
+- MCP-compatible stdio
+- MCP-compatible HTTP at `/mcp`
+- native ZCP tool transport helpers
+- bearer auth metadata and server wiring
+- tool profiles and semantic workflow discovery
+
+### Beta
+
+- streamable HTTP resume/replay behavior
+- WebSocket transport
+- OAuth provider integration
+- task-oriented tool execution
+
+### Experimental
+
+- advanced sampling / elicitation orchestration
+- benchmark-specific semantic workflow adapters outside the public examples
+
+## Repository Layout
+
+- SDK/runtime: [`src/zcp`](src/zcp)
+- examples: [`examples/README.md`](examples/README.md)
+- tests: [`tests`](tests)
+- benchmark reproduction: [`benchmark_reports/README.md`](benchmark_reports/README.md)
 
 ## Validation
 
+Fast local validation:
+
 ```bash
-python3 -m pytest -q
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest -q
 ```
 
-## Alpha Boundary
-
-Repo-level alpha guarantees focus on:
-
-- `initialize`, `initialized`, `ping`
-- tools
-- resources
-- prompts
-- MCP-compatible stdio
-- MCP-compatible HTTP at `/mcp`
-- native ZCP transport helpers
-- bearer auth on the ASGI surface
-
-These remain partial or experimental unless separately contract-tested:
-
-- logging parity details
-- sampling
-- elicitation
-- tasks
-- OAuth flows beyond exposed metadata
+The current repo subset used for release-focused validation includes transport,
+SDK, gateway, and benchmark regression coverage.
 
 ## Benchmarks
 
-Use only the real SDK benchmark as the primary evidence source:
+Primary public benchmark entrypoints:
 
-- script: `examples/compare_zcp_mcp_tool_call_benchmark.py`
-- harness: `tools/benchmarking.py`
-- reports: `benchmark_reports/zcp_mcp_tool_call_benchmark.json` and `.md`
+- compact tool-call benchmark:
+  [`examples/compare_zcp_mcp_tool_call_benchmark.py`](examples/compare_zcp_mcp_tool_call_benchmark.py)
+- Excel LLM token benchmark:
+  [`examples/compare_excel_client_protocol_benchmark.py`](examples/compare_excel_client_protocol_benchmark.py)
 
-The static payload comparison in `examples/compare_mcp_zcp_profiles.py` is only
-reference material and is not the primary benchmark source.
+Public benchmark guidance and official artifact selection:
+
+- [`benchmark_reports/README.md`](benchmark_reports/README.md)
+
+## Security Note
+
+Benchmark and provider-backed examples require environment variables. Do not
+commit API keys. Use [`.env.example`](.env.example) as the reference shape.
+
+## License
+
+Apache-2.0. See [`LICENSE`](LICENSE).

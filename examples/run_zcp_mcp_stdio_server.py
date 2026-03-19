@@ -29,16 +29,32 @@ app = FastZCP("ZCP MCP Compatibility Server")
         "required": ["city"],
         "additionalProperties": False,
     },
+    output_schema={
+        "type": "object",
+        "properties": {
+            "city": {"type": "string"},
+            "unit": {"type": "string"},
+            "temperature": {"type": "integer"},
+            "condition": {"type": "string"},
+            "humidity": {"type": "integer"},
+        },
+        "required": ["city", "unit", "temperature", "condition", "humidity"],
+    },
     output_mode="scalar",
     inline_ok=True,
 )
-def get_weather(city: str, unit: str = "celsius") -> dict[str, object]:
+def get_weather(city: str, unit: str = "celsius", ctx=None) -> dict[str, object]:
     return {"city": city, "unit": unit, "temperature": 24, "condition": "Cloudy", "humidity": 67}
 
 
 @app.resource("weather://cities", name="Cities", mime_type="application/json")
 def cities():
     return ["Hangzhou", "Beijing", "Shanghai"]
+
+
+@app.resource_template("weather://city/{name}", name="City Weather", mime_type="application/json")
+def city_weather(uri: str):
+    return {"uri": uri, "temperature": 24}
 
 
 @app.prompt(
@@ -48,6 +64,12 @@ def cities():
 )
 def weather_prompt(city: str):
     return [{"role": "user", "content": f"Summarize weather for {city}"}]
+
+
+@app.completion("weather.summary")
+def complete_city(request):
+    cities = ["Hangzhou", "Beijing", "Shanghai"]
+    return [item for item in cities if item.lower().startswith(request.value.lower())]
 
 
 if __name__ == "__main__":

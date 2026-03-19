@@ -7,10 +7,20 @@ from .capabilities import (
     PROTOCOL_VERSION,
     ProgressToken,
 )
+from .auth import (
+    AccessToken,
+    AuthorizationCode,
+    InMemoryOAuthProvider,
+    OAuthClient,
+    OAuthProvider,
+    RefreshToken,
+    SQLiteOAuthProvider,
+)
 from .canonical_protocol import CallError, CallRequest, CallResult, HandleRef, RegistryView
 from .canonical_schema import OpenAIStrictSchemaCompiler
 from .codec import decode_tool_output, encode_tool_output
-from .config import BearerAuthConfig, HTTPConfig, RateLimitConfig, SSEConfig, ZCPServerConfig
+from .config import BearerAuthConfig, HTTPConfig, RateLimitConfig, SSEConfig, ToolExposureConfig, ZCPServerConfig
+from .config import OAuthConfig, StreamableHTTPConfig, WebSocketConfig
 from .gateway import MCPGatewayClient, MCPGatewayServer
 from .http import ZCPASGIApp, create_asgi_app
 from .mcp_stdio import run_mcp_stdio_server, run_mcp_stdio_server_sync
@@ -19,6 +29,7 @@ from .profiles import (
     MCPProfile,
     OpenAIAdapter,
     OpenAIResponsesAdapter,
+    SemanticWorkflowProfile,
     TurnResult,
     compile_openai_tools,
     format_call,
@@ -45,6 +56,7 @@ from .runtime import (
     SamplingResult,
     SessionState,
     TaskDescriptor,
+    TaskExecutionContext,
     ToolDefinition,
     ToolRegistry,
     ValidationFailure,
@@ -58,12 +70,16 @@ from .transports import (
     stdio_server,
     streamable_http_client,
     streamable_http_server,
+    websocket_client,
+    websocket_server,
 )
 
 __all__ = [
     "AgentLoop",
     "AuthContext",
     "AuthProfile",
+    "AccessToken",
+    "AuthorizationCode",
     "BearerAuthConfig",
     "CanonicalValidator",
     "CallError",
@@ -79,11 +95,15 @@ __all__ = [
     "HandleRef",
     "HandleStore",
     "HTTPConfig",
+    "InMemoryOAuthProvider",
     "InitializeParams",
     "InitializeResult",
     "MCPGatewayClient",
     "MCPGatewayServer",
     "MCPProfile",
+    "OAuthConfig",
+    "OAuthClient",
+    "OAuthProvider",
     "OpenAIAdapter",
     "OpenAIResponsesAdapter",
     "OpenAIStrictSchemaCompiler",
@@ -93,6 +113,7 @@ __all__ = [
     "PromptDescriptor",
     "RateLimitConfig",
     "RegistryView",
+    "RefreshToken",
     "ResourceDescriptor",
     "ResourceTemplate",
     "RuntimeExecutor",
@@ -100,7 +121,12 @@ __all__ = [
     "SamplingRequest",
     "SamplingResult",
     "SessionState",
+    "SQLiteOAuthProvider",
+    "StreamableHTTPConfig",
+    "SemanticWorkflowProfile",
     "TaskDescriptor",
+    "TaskExecutionContext",
+    "ToolExposureConfig",
     "ToolDefinition",
     "ToolRegistry",
     "TurnResult",
@@ -128,4 +154,7 @@ __all__ = [
     "streamable_http_client",
     "streamable_http_server",
     "submit_tool_results",
+    "WebSocketConfig",
+    "websocket_client",
+    "websocket_server",
 ]

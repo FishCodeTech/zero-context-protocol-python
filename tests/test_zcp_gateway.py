@@ -57,3 +57,54 @@ def test_mcp_gateway_server_and_client_roundtrip() -> None:
     assert tools_server["result"]["tools"][0]["name"] == "weather.get_current"
     assert call_server["result"]["structuredContent"] == {"city": "Hangzhou", "temperature": 24}
     assert resource_server["result"]["contents"][0]["uri"] == "weather://cities"
+
+
+def test_mcp_gateway_uses_mcp_surface_default_profile() -> None:
+    app = FastZCP("Gateway Surface Test", default_tool_profiles={"native": "semantic-workflow", "mcp": ""})
+
+    @app.tool(
+        name="zcp.semantic_plan",
+        description="semantic workflow",
+        input_schema={"type": "object", "properties": {}, "additionalProperties": False},
+        output_mode="scalar",
+        inline_ok=True,
+        metadata={"groups": ["workflow"]},
+    )
+    def semantic_plan():
+        return {"tool": "semantic"}
+
+    @app.tool(
+        name="sheet.write_raw",
+        description="primitive write",
+        input_schema={"type": "object", "properties": {}, "additionalProperties": False},
+        output_mode="scalar",
+        inline_ok=True,
+        metadata={"groups": ["write"]},
+    )
+    def write_raw():
+        return {"tool": "primitive"}
+
+    server = stdio_server(app)
+    client = stdio_client(server)
+    gateway = MCPGatewayServer(server)
+
+    async def run():
+        await client.initialize()
+        await client.initialized()
+        native_tools = await client.list_tools()
+        mcp_tools = await gateway.handle_message({"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}})
+        mcp_call = await gateway.handle_message(
+            {
+                "jsonrpc": "2.0",
+                "id": 2,
+                "method": "tools/call",
+                "params": {"name": "sheet.write_raw", "arguments": {}},
+            }
+        )
+        return native_tools, mcp_tools, mcp_call
+
+    native_tools, mcp_tools, mcp_call = asyncio.run(run())
+    assert [tool["name"] for tool in native_tools["tools"]] == ["zcp.semantic_plan"]
+    assert [tool["name"] for tool in mcp_tools["result"]["tools"]] == ["zcp.semantic_plan", "sheet.write_raw"]
+    assert mcp_call["result"]["isError"] is False
+    assert mcp_call["result"]["structuredContent"] == {"tool": "primitive"}

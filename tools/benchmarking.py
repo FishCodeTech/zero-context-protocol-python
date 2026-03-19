@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -9,9 +10,9 @@ from typing import Any, Callable, Iterable
 
 from openai import OpenAI
 
-DEFAULT_API_KEY = "sk-bdf3780f33b140c5aab7a66fe8459ca4"
-DEFAULT_BASE_URL = "https://api.deepseek.com"
-DEFAULT_MODEL = "deepseek-chat"
+DEFAULT_API_KEY = os.environ.get("OPENAI_API_KEY") or os.environ.get("DEEPSEEK_API_KEY", "")
+DEFAULT_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.deepseek.com")
+DEFAULT_MODEL = os.environ.get("OPENAI_MODEL", "deepseek-chat")
 DEFAULT_REPEATS = 2
 MAX_TOOL_ROUNDS = 8
 
@@ -96,6 +97,7 @@ class ToolSpec:
     exposed_name: str
     description: str
     input_schema: dict[str, Any]
+    metadata: dict[str, Any] | None = None
 
 
 def benchmark_cases() -> list[BenchmarkCase]:
@@ -144,6 +146,10 @@ def benchmark_cases() -> list[BenchmarkCase]:
 
 
 def make_openai_client(*, api_key: str = DEFAULT_API_KEY, base_url: str = DEFAULT_BASE_URL) -> OpenAI:
+    if not api_key:
+        raise ValueError(
+            "api_key is required. Set OPENAI_API_KEY (or DEEPSEEK_API_KEY) or pass --api-key explicitly."
+        )
     return OpenAI(api_key=api_key, base_url=base_url)
 
 

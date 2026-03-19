@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 from dataclasses import dataclass
 from types import SimpleNamespace
+from typing import Any
 
 from zcp import CanonicalValidator, HandleStore, SessionState, ToolDefinition, ToolRegistry, decode_tool_output
 from zcp.adapters.openai import AgentLoop, OpenAIResponsesAdapter

@@ -23,7 +23,7 @@ def maybe_reexec() -> None:
         return
     if BENCH_VENV.exists():
         os.execv(str(BENCH_VENV), [str(BENCH_VENV), __file__, *sys.argv[1:]])
-    raise SystemExit("Python >= 3.10 is required. Create /Users/bytedance/Desktop/agent/ZCP/.venv-bench first.")
+    raise SystemExit("Python >= 3.10 is required. Create a local .venv-bench first.")
 
 
 maybe_reexec()

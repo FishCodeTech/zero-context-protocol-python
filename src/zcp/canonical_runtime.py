@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import inspect
 import json
 from dataclasses import dataclass
 from datetime import timedelta
@@ -45,7 +46,7 @@ class ToolRegistry:
     def get_by_alias(self, alias: str) -> ToolDefinition:
         return self._tools_by_alias[alias]
 
-    def subset(self, aliases: list[str] | tuple[str, ...] | None = None, limit: int = 16) -> RegistryView:
+    def subset(self, aliases: list[str] | tuple[str, ...] | None = None, limit: int = 256) -> RegistryView:
         if aliases is None:
             tools = list(self._tools_by_id.values())
         else:
@@ -305,7 +306,7 @@ class RuntimeExecutor:
             )
 
         try:
-            payload = await self._invoke(tool, validated)
+            payload = await self._invoke(tool, validated, request.context)
         except ValidationFailure as exc:
             return CallResult(
                 cid=request.cid,
@@ -326,10 +327,14 @@ class RuntimeExecutor:
     async def execute_many(self, requests: list[CallRequest]) -> list[CallResult]:
         return list(await asyncio.gather(*(self.execute_call(request) for request in requests)))
 
-    async def _invoke(self, tool: ToolDefinition, arguments: dict[str, Any]) -> Any:
+    async def _invoke(self, tool: ToolDefinition, arguments: dict[str, Any], context: Any = None) -> Any:
         if tool.handler is None:
             raise RuntimeError(f"tool {tool.alias} has no handler")
-        result = tool.handler(arguments)
+        parameters = list(inspect.signature(tool.handler).parameters.values())
+        if context is not None and len(parameters) >= 2:
+            result = tool.handler(arguments, context)
+        else:
+            result = tool.handler(arguments)
         if asyncio.iscoroutine(result):
             return await result
         return result

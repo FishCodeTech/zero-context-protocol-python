@@ -9,7 +9,7 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-ToolHandler = Callable[[dict[str, Any]], Any]
+ToolHandler = Callable[..., Any]
 
 
 @dataclass
@@ -18,6 +18,8 @@ class ToolDefinition:
     alias: str
     description_short: str
     input_schema: dict[str, Any]
+    title: str | None = None
+    output_schema: dict[str, Any] | None = None
     output_mode: Literal["handle", "scalar"] = "handle"
     flags: frozenset[str] = field(default_factory=frozenset)
     defaults: dict[str, Any] = field(default_factory=dict)
@@ -30,6 +32,9 @@ class ToolDefinition:
     summarize: Callable[[Any], str] | None = None
     meta: Callable[[Any], dict[str, Any]] | None = None
     required_scopes: tuple[str, ...] = ()
+    icons: list[dict[str, Any]] | None = None
+    annotations: dict[str, Any] | None = None
+    execution: dict[str, Any] | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -72,6 +77,7 @@ class CallRequest:
     alias: str
     arguments: dict[str, Any]
     raw_call_id: str | None = None
+    context: Any = None
 
 
 @dataclass

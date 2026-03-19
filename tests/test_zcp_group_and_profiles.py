@@ -1,7 +1,7 @@
 import asyncio
 
 from zcp import FastZCP, OpenAIAdapter, ZCPSessionGroup, stdio_client, stdio_server
-from zcp.profiles.oai import OpenAIAdapter
+from zcp.profiles.oai import OpenAIAdapter as ProfileOpenAIAdapter
 
 
 def build_session(tool_name: str):
@@ -52,3 +52,4 @@ def test_oai_profile_exports_zcp_adapter() -> None:
     from zcp.adapters.openai import OpenAIAdapter as DirectOpenAIAdapter
 
     assert OpenAIAdapter is DirectOpenAIAdapter
+    assert ProfileOpenAIAdapter is DirectOpenAIAdapter

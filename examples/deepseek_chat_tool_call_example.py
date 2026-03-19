@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -199,9 +200,12 @@ async def run_with_trace(loop: AgentLoop, client: OpenAI, session: SessionState)
 
 
 async def main() -> None:
+    api_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("DEEPSEEK_API_KEY")
+    if not api_key:
+        raise SystemExit("Set OPENAI_API_KEY or DEEPSEEK_API_KEY before running this example.")
     client = OpenAI(
-        api_key="sk-bdf3780f33b140c5aab7a66fe8459ca4",
-        base_url="https://api.deepseek.com",
+        api_key=api_key,
+        base_url=os.environ.get("OPENAI_BASE_URL", "https://api.deepseek.com"),
     )
     loop, session = build_runtime()
     await run_with_trace(loop, client, session)

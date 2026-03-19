@@ -1,8 +1,8 @@
 # Zero Context Protocol Python SDK
 
 [![PyPI version](https://img.shields.io/pypi/v/zero-context-protocol-sdk.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
-[![Python versions](https://img.shields.io/pypi/pyversions/zero-context-protocol-sdk.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/zero-context-protocol-sdk.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
+[![Python versions](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
+[![PyPI status](https://img.shields.io/badge/downloads-syncing-blue.svg)](https://pypi.org/project/zero-context-protocol-sdk/)
 
 `zero-context-protocol-python` is the reference Python SDK and runtime for Zero
 Context Protocol (ZCP).
